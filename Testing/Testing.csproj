@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Testing</RootNamespace>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- Package Identity -->
+    <PackageId>Testing</PackageId>
+    <Version>0.1.0</Version>
+    <Description>Shared test-support code for `crgolden` apps. Referenced by test projects only, so Playwright and xunit never reach a production project.</Description>
+    <Company>crgolden</Company>
+    <Authors>Chris Golden</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/crgolden/Testing</PackageProjectUrl>
+
+    <!-- Repository & Source Link -->
+    <RepositoryUrl>https://github.com/crgolden/Testing</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Symbols & Documentation -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <!-- Signing & Metadata -->
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Testing.snk</AssemblyOriginatorKeyFile>
+    <PackageIcon>deeprog.png</PackageIcon>
+
+    <!-- Build -->
+    <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<None Include="..\deeprog.png" Pack="true" PackagePath="\" />
+  	<None Remove="..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<AdditionalFiles Include="..\.editorconfig" />
+  	<AdditionalFiles Include="..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<!-- Deliberately NOT PrivateAssets: a consumer's test project needs these at compile time. -->
+  	<PackageReference Include="Microsoft.Playwright" Version="1.62.0" />
+  	<PackageReference Include="xunit.v3.extensibility.core" Version="4.0.0" />
+  	<PackageReference Include="SonarAnalyzer.CSharp" Version="10.33.0.1635">
+  	  <PrivateAssets>all</PrivateAssets>
+  	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  	</PackageReference>
+  	<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+  	  <PrivateAssets>all</PrivateAssets>
+  	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  	</PackageReference>
+  </ItemGroup>
+
+</Project>
