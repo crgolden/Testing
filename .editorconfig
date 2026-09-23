@@ -5,6 +5,8 @@
 
 # Code files
 [*.{cs,vb}]
+resharper_csharp_qualified_using_at_nested_scope = true
+insert_final_newline = true
 
 
 # CA1000: Do not declare static members on generic types
@@ -626,14 +628,7 @@ dotnet_diagnostic.SA1309.severity = none
 # SA1633: File should have header
 dotnet_diagnostic.SA1633.severity = none
 
-# SA1135: Using directives should be qualified
-dotnet_diagnostic.SA1135.severity = none
 
-# SA1009: Closing parenthesis should be spaced correctly
-dotnet_diagnostic.SA1009.severity = none
-
-# SA1111: Closing parenthesis should be on line of last parameter
-dotnet_diagnostic.SA1111.severity = none
 
 # SA1600: Elements should be documented
 dotnet_diagnostic.SA1600.severity = silent

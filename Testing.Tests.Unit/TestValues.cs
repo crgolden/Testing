@@ -17,9 +17,15 @@ internal static class TestValues
 
     internal static double NewPercent() => Math.Round(Random.Shared.NextDouble() * 100, 2);
 
+    internal static int NewCountCeiling() => Random.Shared.Next(LargestCount, LargestCount * 10);
+
+    internal static double NewPercentCeiling() => Random.Shared.Next(101, 1000);
+
     internal static string NewText() => Token(LowercaseAlphabet, VariableNameLength);
 
     internal static string NewUnparsableNumber() => Token(LowercaseAlphabet, VariableNameLength);
+
+    internal static string Padded(string value) => $" {value} ";
 
     internal static string AsInvariant(int value) => value.ToString(CultureInfo.InvariantCulture);
 

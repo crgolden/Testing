@@ -2,54 +2,9 @@ namespace Testing.Playwright;
 
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Text.Json;
 using Microsoft.Playwright;
 using Xunit;
-using Xunit.v3;
-
-[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-public sealed class PlaywrightArtifactFinalizerAttribute : BeforeAfterTestAttribute
-{
-    public override void Before(MethodInfo methodUnderTest, IXunitTest test)
-    {
-        ArgumentNullException.ThrowIfNull(test);
-        PlaywrightArtifactRecorder.Clear(test.UniqueID);
-    }
-
-    public override void After(MethodInfo methodUnderTest, IXunitTest test)
-    {
-        ArgumentNullException.ThrowIfNull(test);
-        var state = TestContext.Current.TestState;
-        PlaywrightArtifactRecorder.Finalize(test.UniqueID, state);
-    }
-}
-
-internal sealed class PlaywrightArtifactSession : IAsyncDisposable
-{
-    private readonly PlaywrightArtifactRecorder _recorder;
-    private readonly IBrowserContext _context;
-    private readonly IPage _page;
-    private bool _disposed;
-
-    public PlaywrightArtifactSession(PlaywrightArtifactRecorder recorder, IBrowserContext context, IPage page)
-    {
-        _recorder = recorder;
-        _context = context;
-        _page = page;
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        _disposed = true;
-        await _recorder.CompleteAsync(_context, _page).ConfigureAwait(false);
-    }
-}
 
 public sealed class PlaywrightArtifactRecorder
 {

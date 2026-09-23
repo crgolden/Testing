@@ -4,10 +4,11 @@ namespace Testing.Tests.Unit;
 public sealed class EnvironmentSettingTests : IDisposable
 {
     private const int Minimum = 1;
-    private const int Maximum = 5000;
-    private const double MaximumPercent = 100.0;
     private const int BelowMinimum = Minimum - 1;
-    private const int AboveMaximum = Maximum + 1;
+
+    private static readonly int Maximum = TestValues.NewCountCeiling();
+    private static readonly int AboveMaximum = Maximum + 1;
+    private static readonly double MaximumPercent = TestValues.NewPercentCeiling();
 
     private readonly string _variableName = TestValues.NewVariableName();
 
@@ -39,6 +40,34 @@ public sealed class EnvironmentSettingTests : IDisposable
 
         // Assert
         Assert.Equal(configured, resolved);
+    }
+
+    [Fact]
+    public void Count_VariableSurroundedByWhitespace_Parses()
+    {
+        // Arrange
+        var configured = TestValues.NewCount();
+        Environment.SetEnvironmentVariable(_variableName, TestValues.Padded(TestValues.AsInvariant(configured)));
+
+        // Act
+        var resolved = EnvironmentSetting.Count(_variableName, TestValues.NewCount(), Minimum, Maximum);
+
+        // Assert
+        Assert.Equal(configured, resolved);
+    }
+
+    [Fact]
+    public void Count_NegativeVariable_StillThrowsNamingTheVariable()
+    {
+        // Arrange
+        Environment.SetEnvironmentVariable(_variableName, TestValues.AsInvariant(-TestValues.NewCount()));
+
+        // Act
+        var thrown = Assert.Throws<InvalidOperationException>(
+            () => EnvironmentSetting.Count(_variableName, TestValues.NewCount(), Minimum, Maximum));
+
+        // Assert
+        Assert.Contains(_variableName, thrown.Message, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -98,6 +127,34 @@ public sealed class EnvironmentSettingTests : IDisposable
     }
 
     [Fact]
+    public void Percent_VariableSurroundedByWhitespace_Parses()
+    {
+        // Arrange
+        var configured = TestValues.NewPercent();
+        Environment.SetEnvironmentVariable(_variableName, TestValues.Padded(TestValues.AsInvariant(configured)));
+
+        // Act
+        var resolved = EnvironmentSetting.Percent(_variableName, TestValues.NewPercent(), MaximumPercent);
+
+        // Assert
+        Assert.Equal(configured, resolved);
+    }
+
+    [Fact]
+    public void Percent_NegativeVariable_StillThrowsNamingTheVariable()
+    {
+        // Arrange
+        Environment.SetEnvironmentVariable(_variableName, TestValues.AsInvariant(-TestValues.NewCount()));
+
+        // Act
+        var thrown = Assert.Throws<InvalidOperationException>(
+            () => EnvironmentSetting.Percent(_variableName, TestValues.NewPercent(), MaximumPercent));
+
+        // Assert
+        Assert.Contains(_variableName, thrown.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Percent_VariableUnset_ReturnsTheDeclaredDefault()
     {
         // Arrange
@@ -129,7 +186,8 @@ public sealed class EnvironmentSettingTests : IDisposable
     {
         // Arrange
         var declaredDefault = TestValues.NewText();
-        Environment.SetEnvironmentVariable(_variableName, " ");
+        var blank = Generated.NewBlank();
+        Environment.SetEnvironmentVariable(_variableName, blank);
 
         // Act
         var resolved = EnvironmentSetting.Text(_variableName, declaredDefault);

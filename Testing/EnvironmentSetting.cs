@@ -4,6 +4,9 @@ using System.Globalization;
 
 public static class EnvironmentSetting
 {
+    private const NumberStyles PercentStyles = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite
+        | NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint;
+
     public static int Count(string variableName, int defaultValue, int minimum, int maximum)
     {
         var raw = Environment.GetEnvironmentVariable(variableName);
@@ -12,7 +15,7 @@ public static class EnvironmentSetting
             return defaultValue;
         }
 
-        if (!int.TryParse(raw, NumberStyles.None, CultureInfo.InvariantCulture, out var value)
+        if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value)
             || value < minimum
             || value > maximum)
         {
@@ -31,7 +34,7 @@ public static class EnvironmentSetting
             return defaultValue;
         }
 
-        if (!double.TryParse(raw, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var value)
+        if (!double.TryParse(raw, PercentStyles, CultureInfo.InvariantCulture, out var value)
             || value < 0
             || value > maximum)
         {

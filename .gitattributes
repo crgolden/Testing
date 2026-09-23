@@ -8,7 +8,7 @@
 *.bat text eol=crlf
 *.cmd text eol=crlf
 
-# Never diff, never normalise.
+# Never diff, never normalize.
 *.png binary
 *.jpg binary
 *.jpeg binary
